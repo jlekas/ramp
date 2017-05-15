@@ -1,0 +1,29 @@
+what project needs:
+- code and makefiles
+- man pages for users (man pages), sysamin (how to compile and install, plat
+forms that it works on), and developer (describe algorithm, continue it)
+- licensing, history or development, credits, possible security issues
+- non-trivial test examples (should probably write a script displaying what
+the project does)
+EVERY OTHER WEEK WE SHOULD'VE:
+- should journal documenting progress with a todo list by every member
+- number versions 
+
+grading:
+- how well program structured so easy further development
+- diagram modules and API
+- quality of documentation (not length)
+- functional, efficient, innovative numerrical algorithm, show tests on 
+provided examples
+
+img to ascii(probably 3ish hours of work):
+- use opencv to convert picture to grayscale pixel array
+- from grayscale set different chars to different values
+-
+
+file sharing:
+- 
+
+things to remember:
+- document versions with explanation of what has been changed
+
