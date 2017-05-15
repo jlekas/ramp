@@ -1,2 +1,2 @@
 # ramp
-p2p 
+A peer to peer file sharing service
