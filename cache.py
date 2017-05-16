@@ -5,12 +5,16 @@
 #not found last, on local, on friend; local path; friend ip it looked last time
 
 import os
+import sqlite3
 
 class query:
     def __init__(self, messageID, userID):
         self.messageId = messageID
         self.userID = userID
 
+    def __repr__(self):
+        return ("query{message: "+self.messageId+", userId: "+self.userID+"}")
+    
     def alreadySeen(self):
         #look in database to see if query seen already
         return 0

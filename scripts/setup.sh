@@ -14,6 +14,8 @@ if [ "$(uname)" == "Linux" ]; then
   sudo make altinstall
   # at this point python 2.7.13 is installed and can be used
   sudo apt-get install python-tk
+  #install or make sure sqlite3 is installed
+  sudo apt-get install sqlite3
 elif [ "$(uname)" == "Darwin" ]; then
   #if the computer is a mac check that python 2.7.13 and various
   #packages are installed in order to run application
