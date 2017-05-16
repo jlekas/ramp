@@ -36,6 +36,8 @@ class app(Frame):
 
 
 def connect():
+  print "name %s" % (a.cName.get())
+  print "port %s" % (a.cPort.get())
   thread.start_new_thread(outgoing.makeConnection, (a.cName.get(),a.cPort.get()))
   
   #print 'Name: %s' % (a.cName.get())
