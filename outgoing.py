@@ -16,7 +16,7 @@ def makeConnection(name,port):
 #  try:
   out.connect(addr)
   print out.recv(1024)
-  out.close
+  out.close()
 
   
   #message = out.recv(1024)

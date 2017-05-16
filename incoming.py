@@ -21,7 +21,6 @@ def myPort():
 def serve(a):
   while a:
     client, address = me.accept()
-    print "shouldsayhello!!!" 
     client.send('Hello')
     client.close()
 
