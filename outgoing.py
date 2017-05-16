@@ -1,13 +1,18 @@
 #!/usr/bin/python
 import socket
 
-def makeConnection(name,port):
-  s = socket.socket()
+out = socket.socket()
+message = ""
 
+
+def makeConnection(name,port):
   try:
-    s.connect(name,port)
-    connections[name] = s
+    port = int(port)
+    out.connect(name,port)
+    message = out.recv(1024)
+    print message
   except:
     print 'could not connect'
 
-  
+def getMessage():
+  return message
