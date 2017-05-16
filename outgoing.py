@@ -11,8 +11,10 @@ def makeConnection(name,port):
   except:
     print 'bad port entry'
 
+  addr = (name,port)
+
   try:
-    out.connect(name,port)
+    out.connect(addr)
     #message = out.recv(1024)
     #print message
   except:
