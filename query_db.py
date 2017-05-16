@@ -3,8 +3,8 @@ import sqlite3
 sqlite_file = "Ramp.sqlite"
 table_name1 = "Queries"
 
-connect = sqlite3.connect(sqlite_file)
-c = connect.cursor()
+db = sqlite3.connect(sqlite_file)
+c = db.cursor()
 
 #make the queries table
 c.execute('''
@@ -15,5 +15,5 @@ c.execute('''
             hostName varchar(255)
             );
         ''')
-connect.commit()
-connect.close()
+db.commit()
+db.close()
