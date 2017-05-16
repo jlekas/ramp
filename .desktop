@@ -1,0 +1,3 @@
+Name=Ramp
+Exec=~/Ramp/Ramp.sh
+Type=Application
