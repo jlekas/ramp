@@ -10,13 +10,13 @@ import os
 import sqlite3
 
 class query:
-    def __init__(self, messageID, message):
+    def __init__(self, messageID, message, privPub):
         self.messageID = messageID
         self.message = message
-        self.userID = userID
+        self.privPub = privPub
 
     def __repr__(self):
-        return ("query{message: "+self.messageID+", userId: "+self.userID+"}")
+        return ("query{message: "+str(self.messageID)+", message: "+self.message+"}")
     
     def alreadySeen(self):
         #returns -1 if not seen, 0 if seen 
@@ -29,13 +29,15 @@ class query:
             '''SELECT * FROM queries where messageID=?''', (self.messageID, )
             )
         q = cursor.fetchone()
-        db.close()
-        if (q == None):
+        print(q)
+        if (q != None):
+            db.close()
             return -1
         #if not seen add query to table
         cursor.execute(
             '''INSERT INTO queries(messageID) VALUES(?)''', (self.messageID, )
             )
+        db.commit()
         #returns fountInt
         db.close()
         return 0
@@ -49,14 +51,15 @@ class query:
                 files += self.displayFiles(path+ os.pathsep + file)
             return files
 
-    def findLocal(self, privPub):
+    def findLocal(self):
         #check if seen and if seen return -1 don't look in files
         seen = self.alreadySeen()
+        #if it was seen return -1
         if (seen == -1):
             return -1
         #query hasn't been seen so looks up query in public directory
         files = self.displayFiles("Public")
-        if (privPub == "Private"):
+        if (self.privPub == "Private"):
             files += self.displayFiles("Private")
         #list of files that match query
         retFiles = []
@@ -71,21 +74,22 @@ class query:
 
 class fileQuery(query):
 
-    def __init__(self, messageID, message):
+    def __init__(self, messageID, message, privPub):
         super().__init__(messageID, message)
 
-    def findLocal(self, privPub):
+    def findLocal(self):
         seen = self.alreadySeen()
         if (seen == -1):
             return -1
         #query hasn't been seen so looks up query in public directory
         files = self.displayFiles("Public")
-        if (privPub == "Private"):
+        if (self.privPub == "Private"):
             files += self.displayFiles("Private")
         #list of files that match query
         retFiles = []
         for file in files:
-            if self.message in file:
+            #will only look at file or last thing in splitting path
+            if (self.message == file.split(os.pathsep)[-1]):
                 retFiles += [file]
         #if no files match criteria return 0 else return list of filenames
         if len(retFiles) == 0:
