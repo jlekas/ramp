@@ -13,12 +13,13 @@ def makeConnection(name,port):
 
   addr = (name,port)
 
-  try:
+#  try:
     out.connect(addr)
     #message = out.recv(1024)
     #print message
-  except:
+'''  except:
     print 'could not connect'
+'''
 
 def getMessage():
   return message
