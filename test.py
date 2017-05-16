@@ -1,5 +1,5 @@
 #!/usr/bin/python  
-
+#test
 import sys
 import socket
 import thread
@@ -35,7 +35,8 @@ while True:
      out.bind(sendname, sendport))
      thread.start_new_thread(
 
-#def main():
+def main():
+
   
 
 
