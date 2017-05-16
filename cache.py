@@ -16,7 +16,8 @@ class query:
         self.privPub = privPub
 
     def __repr__(self):
-        return ("query{message: "+str(self.messageID)+", message: "+self.message+"}")
+        return ("query{message: "+str(self.messageID)+", message:"
+                +self.message+", privPub: "+self.privPub+"}")
     
     def alreadySeen(self):
         #returns -1 if not seen, 0 if seen 
