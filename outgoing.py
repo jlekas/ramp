@@ -14,7 +14,7 @@ def makeConnection(name,port):
   addr = (name,port)
 
 #  try:
-    out.connect(addr)
+  out.connect(addr)
     #message = out.recv(1024)
     #print message
 '''  except:
