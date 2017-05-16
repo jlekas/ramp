@@ -1,4 +1,9 @@
 from Tkinter import *
+import thread
+import outgoing 
+
+connections = dict()
+
 
 class app(Frame):
   
@@ -17,8 +22,13 @@ class app(Frame):
 
 
 def connect():
-  print 'Name: %s' % (a.cName.get())
-  print 'Port %s' % (a.cPort.get())
+  port = int(a.cPort.get())
+  thread.start_new_thread(outgoing.makeConnection, (a.cName.get(),a.cPort.get()))
+  
+  #print 'Name: %s' % (a.cName.get())
+  #print 'Port %s' % (a.cPort.get())
+
+
 
 root = Tk()
 a = app(master=root)
