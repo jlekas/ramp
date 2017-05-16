@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import socket
 
-out = socket.socket()
+out = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 message = ""
 
 
