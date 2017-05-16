@@ -15,7 +15,11 @@ def makeConnection(name,port):
 
 #  try:
   out.connect(addr)
-    #message = out.recv(1024)
+  print out.recv(1024)
+  out.close
+
+  
+  #message = out.recv(1024)
     #print message
 '''  except:
     print 'could not connect'
