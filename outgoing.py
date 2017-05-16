@@ -13,8 +13,8 @@ def makeConnection(name,port):
 
   try:
     out.connect(name,port)
-    message = out.recv(1024)
-    print message
+    #message = out.recv(1024)
+    #print message
   except:
     print 'could not connect'
 
