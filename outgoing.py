@@ -15,7 +15,7 @@ def makeConnection(name,port):
   buffer = 1024
 
 #  try:
-  s.connect(addr)
+  client.connect(addr)
 
   
 '''  except:
