@@ -12,5 +12,12 @@ c.execute('''
             messageID int
             );
         ''')
+c.execute('''
+        CREATE TABLE messages(
+            user TEXT,
+            message TEXT
+            time TIMESTAMP
+            );
+        ''')
 db.commit()
 db.close()
