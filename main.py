@@ -20,8 +20,6 @@ class app(Frame):
     myPort = incoming.myPort()
 
   def createScreen(self):
-    self.TEST = Button(self,text="Connect",command=connect)
-    self.TEST.pack()
     print myName
     self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
     self.myname.pack()
