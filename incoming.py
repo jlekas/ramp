@@ -2,9 +2,7 @@
 import socket
 import thread
 
-server = None 
-
-def init():
+def init(server):
   if server != None:
     server.close()
     server = None
@@ -14,7 +12,7 @@ def init():
   port = 1085
   server.bind((myIP,port))
   server.listen(5)
-  thread.start_new_thread(findClients,(1,))
+  thread.start_new_thread(findClients,(1,server))
 
 def myName():
   return get_address() 
@@ -22,7 +20,7 @@ def myName():
 def myPort():
   return "1085"
 
-def findClients(a):
+def findClients(a, server):
   while a:
     user, address = server.accept()
     print "Connection from %s %s" % (user, address)

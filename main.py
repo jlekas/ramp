@@ -14,7 +14,8 @@ class app(Frame):
     Frame.__init__(self, master)
     self.createScreen()
     self.pack()
-    incoming.init()
+    server = None
+    incoming.init(server)
     myName = incoming.myName()
     myPort = incoming.myPort()
 
@@ -31,12 +32,11 @@ class app(Frame):
     self.myPort.pack()
     self.cPort = Entry(self)
     self.cPort.pack()
-    self.mes = Label(self,text=outgoing.getMessage())
-    self.mes.pack()
     
     self.message = Entry(self)
     self.message.pack()
-    self.Send = Button(self, text="Send Message",command=incoming.sendMessage)
+    self.Send = Button(self, text="Send Message",command=outgoing.sendMessage("hellllo"))
+    self.Send.pack()
 
 def connect():
   print "name %s" % (a.cName.get())
