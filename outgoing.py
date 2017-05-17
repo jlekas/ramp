@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import socket
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-message = "hello sending test"
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 
 
 def makeConnection(name,port):
@@ -16,14 +16,11 @@ def makeConnection(name,port):
 
 #  try:
   s.connect(addr)
-  s.send(mesesage)
-  received = s.recv(buffer)
-  s.close()
 
   
 '''  except:
     print 'could not connect'
 '''
 
-def getMessage():
-  return message
+def sendMessage(message):
+  client.send(message)
