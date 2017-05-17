@@ -35,13 +35,13 @@ class app(Frame):
     
     self.message = Entry(self)
     self.message.pack()
-    self.Send = Button(self, text="Send Message",command= lambda: outgoing.sendMessage(self.message.get()))
+    self.Send = Button(self, text="Send Message",command= lambda: connect(self.message.get()))
     self.Send.pack()
 
-def connect():
+def connect(message):
   print "name %s" % (a.cName.get())
   print "port %s" % (a.cPort.get())
-  thread.start_new_thread(outgoing.makeConnection, (a.cName.get(),a.cPort.get()))
+  thread.start_new_thread(outgoing.sendMessage,(a.cName.get(),a.cPort.get(),message))
   
   #print 'Name: %s' % (a.cName.get())
   #print 'Port %s' % (a.cPort.get())

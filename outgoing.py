@@ -3,15 +3,9 @@
 import errno
 import socket
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
 def makeConnection(name,port):
-#  client.close()
-
-
-
   try:
     port = int(port)
   except:
@@ -41,8 +35,15 @@ def makeConnection(name,port):
     print 'could not connect'
 '''
 
-def sendMessage(message):
+def sendMessage(name,port,message):
+    port = int(port)
+    addr = (name,port)
+    buffer = 1024
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
+        client.connect(addr)
         client.send(message)
-    except:
-        print("oops")
+        client.close()
+    except socket.error, e:
+        print(e, "e", socket.error, "sock")
