@@ -2,15 +2,19 @@
 import socket
 import thread
 
-me = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+server = None 
 
 def init():
-  host = get_address()
-  print host
+  if server != None:
+    server.close()
+    server = None
+  server = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) 
+  myIP = get_address()
+  print "my IP: %s" % (myIP) 
   port = 1085
-  me.bind((host,port))
-  me.listen(5)
-  thread.start_new_thread(serve,(1,))
+  server.bind((myIP,port))
+  server.listen(5)
+  thread.start_new_thread(findClients,(1,))
 
 def myName():
   return get_address() 
@@ -18,11 +22,21 @@ def myName():
 def myPort():
   return "1085"
 
-def serve(a):
+def findClients(a):
   while a:
-    client, address = me.accept()
-    client.send('Hello')
-    client.close()
+    user, address = server.accept()
+    print "Connection from %s %s" % (user, address)
+    thread.start_new_thread(recClient, (user, address))
+  server.close()
+
+def recClient(name, address):
+  while 1:
+    try:
+      message = name.recv(1024) #magic number size of rec message
+      print message 
+    except:
+      break
+  name.close()
 
 
 def get_address(): #this function was taken from user wmcbrine on
