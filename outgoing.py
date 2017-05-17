@@ -6,6 +6,10 @@ client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
 def makeConnection(name,port):
+  client.close()
+
+
+
   try:
     port = int(port)
   except:
@@ -15,7 +19,10 @@ def makeConnection(name,port):
   buffer = 1024
 
 #  try:
-  client.connect(addr)
+  try:
+    client.connect(addr)
+  except socket.error, e:
+    print "error: %s" % (e)
 
   
 '''  except:
