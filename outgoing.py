@@ -22,7 +22,15 @@ def makeConnection(name,port):
   try:
     client.connect(addr)
   except socket.error, e:
-    print "error: %s" % (e)
+    if 'Errno 56' in e: 
+      client.close()  
+      print 'reseting client socket'
+      client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+      makeConnection(name, port)
+    else:
+      print 'didnt pick up error 56'
+
 
   
 '''  except:
