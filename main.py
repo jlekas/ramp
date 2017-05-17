@@ -22,12 +22,12 @@ class app(Frame):
     self.TEST = Button(self,text="Connect",command=connect)
     self.TEST.pack()
     print myName
-    self.myname = Label(self,text=incoming.myName(), relief=RAISED)
+    self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
     self.myname.pack()
     self.cName = Entry(self)
     self.cName.pack()
     
-    self.myPort = Label(self,text=incoming.myPort(),relief=RAISED)
+    self.myPort = Label(self,text="Connecting port",relief=RAISED)
     self.myPort.pack()
     self.cPort = Entry(self)
     self.cPort.pack()
