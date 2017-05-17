@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import socket
 
-out = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-message = ""
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+message = "hello sending test"
 
 
 def makeConnection(name,port):
@@ -12,15 +12,15 @@ def makeConnection(name,port):
     print 'bad port entry'
 
   addr = (name,port)
+  buffer = 1024
 
 #  try:
-  out.connect(addr)
-  print out.recv(1024)
-  out.close()
+  s.connect(addr)
+  s.send(mesesage)
+  received = s.recv(buffer)
+  s.close()
 
   
-  #message = out.recv(1024)
-    #print message
 '''  except:
     print 'could not connect'
 '''
