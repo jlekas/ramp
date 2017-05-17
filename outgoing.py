@@ -1,4 +1,6 @@
 #!/usr/bin/python
+
+import errno
 import socket
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,13 +24,15 @@ def makeConnection(name,port):
   try:
     client.connect(addr)
   except socket.error, e:
-    if 'Errno 56' in e: 
+    print e
+    if e.errno == errno.EISCONN: 
       client.close()  
       print 'reseting client socket'
      # client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
      # client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
       makeConnection(name, port)
     else:
+      print e
       print 'didnt pick up error 56'
 
 
