@@ -1,5 +1,5 @@
 from Tkinter import *
-import threading
+import thread
 import outgoing 
 import incoming 
 
@@ -33,7 +33,10 @@ class app(Frame):
     self.cPort.pack()
     self.mes = Label(self,text=outgoing.getMessage())
     self.mes.pack()
-
+    
+    self.message = Entry(self)
+    self.message.pack()
+    self.Send = Button(self, text="Send Message",command=incoming.sendMessage)
 
 def connect():
   print "name %s" % (a.cName.get())
