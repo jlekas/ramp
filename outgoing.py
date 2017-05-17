@@ -6,7 +6,7 @@ client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
 def makeConnection(name,port):
-  client.close()
+#  client.close()
 
 
 
