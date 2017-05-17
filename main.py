@@ -1,5 +1,5 @@
 from Tkinter import *
-import thread
+import threading
 import outgoing 
 import incoming 
 
