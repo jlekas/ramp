@@ -15,8 +15,8 @@ c.execute('''
 c.execute('''
         CREATE TABLE messages(
             user TEXT,
-            message TEXT
-            time TIMESTAMP
+            message TEXT,
+            message_time TIMESTAMP
             );
         ''')
 db.commit()

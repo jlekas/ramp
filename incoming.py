@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import socket
 import thread
+import ramp_db
 
 def init(server):
   if server != None:
@@ -14,8 +15,6 @@ def init(server):
   server.bind((myIP,port))
   server.listen(5)
   thread.start_new_thread(findClients,(1,server))
-
-
 
 def myName():
   return get_address() 
@@ -36,8 +35,13 @@ def recClient(name, address):
       message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      print message 
-    except:
+      print message
+      m = ramp_db.chatMessage("Scott", message)
+      print(m)
+      m.add_db()
+      print("work")
+    except Exception, e:
+      print(e)
       break
   name.close()
 
