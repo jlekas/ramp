@@ -23,4 +23,7 @@ def makeConnection(name,port):
 '''
 
 def sendMessage(message):
-  client.send(message)
+    try:
+        client.send(message)
+    except:
+        print("oops")
