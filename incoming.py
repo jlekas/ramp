@@ -7,12 +7,15 @@ def init(server):
     server.close()
     server = None
   server = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) 
+  server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   myIP = get_address()
   print "my IP: %s" % (myIP) 
   port = 1085
   server.bind((myIP,port))
   server.listen(5)
   thread.start_new_thread(findClients,(1,server))
+
+
 
 def myName():
   return get_address() 
