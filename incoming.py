@@ -34,6 +34,8 @@ def recClient(name, address):
   while 1:
     try:
       message = name.recv(1024) #magic number size of rec message
+      if message == ""
+        break
       print message 
     except:
       break
