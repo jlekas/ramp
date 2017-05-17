@@ -35,7 +35,7 @@ class app(Frame):
     
     self.message = Entry(self)
     self.message.pack()
-    self.Send = Button(self, text="Send Message",command=outgoing.sendMessage("hellllo"))
+    self.Send = Button(self, text="Send Message",command= lambda: outgoing.sendMessage(self.message.get()))
     self.Send.pack()
 
 def connect():
