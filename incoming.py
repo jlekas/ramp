@@ -35,9 +35,8 @@ def recClient(name, address):
       message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      print message
-      m = ramp_db.chatMessage("Scott", message)
-      print(m)
+      print message, address[0]
+      m = ramp_db.chatMessage(address[0], message)
       m.add_db()
       print("work")
     except Exception, e:
