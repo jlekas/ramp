@@ -10,6 +10,7 @@ def sendMessage(name,port,message):
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     client.connect(addr)
+    client.send(1) #1 is our identifier for chat 
     client.send(message)
     client.close()
 
