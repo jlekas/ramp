@@ -9,6 +9,8 @@ connections = dict()
 myName = ""
 myPort = ""
 
+messages = ["o", "su!", "my", "lmepoop tonight !", "big poopy cuisine", "poop"]
+
 class app(Frame):
   
   def __init__(self, master=None):
@@ -30,6 +32,19 @@ class app(Frame):
     fileShareMenu.add_command(label="General Search", command=self.fillerFunction)
     fileShareMenu.add_command(label="Add Files to Public", command=self.fillerFunction)
     fileShareMenu.add_command(label="Add Files to Private", command=self.fillerFunction)
+
+
+   # for message in messages:
+   #   self.a = Message(self, text=message,anchor=SW, width = 100)
+   #   self.a.pack()
+
+
+    self.chatBox = Listbox(root)
+    self.chatBox.pack()
+
+    for message in messages:
+      self.chatBox.insert(END, message)
+    
 
     self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
     self.myname.pack()
