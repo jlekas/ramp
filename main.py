@@ -19,8 +19,18 @@ class app(Frame):
     incoming.init(server)
     myName = incoming.myName()
     myPort = incoming.myPort()
+    
+  def fillerFunction(self):
+      return
 
   def createScreen(self):
+    menubar = Menu(self)
+    fileShareMenu = Menu(menubar, tearoff=0)
+    fileShareMenu.add_command(label="Search For File", command=self.fillerFunction)
+    fileShareMenu.add_command(label="General Search", command=self.fillerFunction)
+    fileShareMenu.add_command(label="Add Files to Public", command=self.fillerFunction)
+    fileShareMenu.add_command(label="Add Files to Private", command=self.fillerFunction)
+
     self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
     self.myname.pack()
     self.cName = Entry(self)
