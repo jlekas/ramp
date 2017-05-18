@@ -14,7 +14,8 @@ c.execute('''
         ''')
 c.execute('''
         CREATE TABLE messages(
-            user TEXT,
+            sender TEXT,
+            receiver TEXT,
             message TEXT,
             message_time TIMESTAMP
             );

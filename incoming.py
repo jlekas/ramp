@@ -35,7 +35,7 @@ def recClient(name, address):
       if not message:
         break
       print message
-      m = ramp_db.chatMessage(address[0], message)
+      m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
       m.add_db()
     except Exception, e:
       print(e)
