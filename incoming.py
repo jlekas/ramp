@@ -29,14 +29,22 @@ def findClients(a, server):
   server.close()
 
 def recClient(name, address):
+  try: 
+    tag = name.recv(1)
+    if(tag == "/"):
+      fileReceive(name, address, "pupper.jpg")
+      print "receiving FILE"
+      return
+  except:
+    print "couldnt receive first bit"
   while 1:
     try:
-      message = name.recv(1024) #magic number size of rec message
+      message = name.recv(1) #magic number size of rec message
       if not message:
         break
-      print message
+      print "MESSAGE :  %s" % message 
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
-      print(ramp_db.getChats(address[0], "127.0.0.1"))
+      #print(ramp_db.getChats(address[0], "127.0.0.1"))
       m.add_db()
     except Exception, e:
       print(e)
@@ -50,7 +58,7 @@ def fileReceive(connect, address, fileStr):
     data = connect.recv(buffer)
     if not data:
       break
-    print(data)
+    #print(data)
     newFile.write(data)
   newFile.close()
   connect.close()
