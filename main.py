@@ -43,8 +43,9 @@ class app(Frame):
     self.chatBox.pack()
 
     for message in messages:
-      self.chatBox.insert(END, message)
-    
+      text = ramp.db.getChat(
+       self.chatBox.insert(END, message)
+       
 
     self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
     self.myname.pack()
