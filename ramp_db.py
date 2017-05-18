@@ -3,8 +3,9 @@ import os
 from datetime import date, datetime
 
 class chatMessage:
-    def __init__(self, user, message):
-        self.user = user
+    def __init__(self, sender, receiver, message):
+        self.sender = sender
+        self.receiver = receiver
         self.message = message
 
     def add_db(self):
@@ -13,7 +14,7 @@ class chatMessage:
         cursor = db.cursor()
         n = datetime.now()
         cursor.execute(
-            '''INSERT INTO messages(user, message, message_time) VALUES(?,?,?)''', (self.user, self.message, n)
+            '''INSERT INTO messages(sender, receiver, message, message_time) VALUES(?,?,?,?)''', (self.sender, self.receiver, self.message, n)
             )
         db.commit()
         db.close()
