@@ -10,7 +10,6 @@ def init(server):
   server = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) 
   server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   myIP = get_address()
-  print "my IP: %s" % (myIP) 
   port = 1085
   server.bind((myIP,port))
   server.listen(5)
@@ -25,7 +24,7 @@ def myPort():
 def findClients(a, server):
   while a:
     user, address = server.accept()
-    print "Connection from %s %s" % (user, address)
+    #print "Connection from %s %s" % (user, address)
     thread.start_new_thread(recClient, (user, address))
   server.close()
 
@@ -35,10 +34,9 @@ def recClient(name, address):
       message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      print message, address[0]
+      print message
       m = ramp_db.chatMessage(address[0], message)
       m.add_db()
-      print("work")
     except Exception, e:
       print(e)
       break

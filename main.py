@@ -21,7 +21,6 @@ class app(Frame):
     myPort = incoming.myPort()
 
   def createScreen(self):
-    print myName
     self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
     self.myname.pack()
     self.cName = Entry(self)
@@ -38,8 +37,6 @@ class app(Frame):
     self.Send.pack()
 
 def connect(message):
-  print "name %s" % (a.cName.get())
-  print "port %s" % (a.cPort.get())
   thread.start_new_thread(outgoing.sendMessage,(a.cName.get(),a.cPort.get(),message))
   
   #print 'Name: %s' % (a.cName.get())
