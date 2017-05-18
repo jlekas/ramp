@@ -1,0 +1,77 @@
+Centralized model of p2p
+- central server directs traffic between individual peers
+- file transfer is p2p 
+- central servers maintain directories of shared files stored at at peer of current network and when user logs on or off directories update to invlude / remove files shared by specific user
+- when searching uses central database currently on network and creates list of files matching serach
+- user then opens direct HTTP link with peer who has file and file directed p2p
+- used by napster
+
+Decentralized model p2p
+- each peer acts as client and server and no super peers
+- index on meta-data of shared files is locally soted in all peers
+- to find shared file a user asks nodes its connected to and continues to ask friends continuously
+- used by gnutella and freenet
+
+compared
+- central server is only point of entry for peers and can become a bottleneck of system
+- central server crash will crash whole system
+- central server has to update continually if user leaves or enters network
+- decentralized one peer can fail and network won't go down
+- since indexing info is locally file discovery requires search of entire network so would wanna use graph in order to index each peer
+
+partially centralized
+- registered user can look for super noes through a site and needs to proved un and password to get access to super node
+- server proves ip address and port of super nodes the peer connects to
+- peer connects to super node which acts as serach hub maintaining index of files by each peer
+
+Decentralized revisited:
+- success of p2p sharing depends on success of file disctoery mechanisms
+
+Freenet:
+- each node maintains its local files and makes available to network as well as routing table containing addresses of other nodes associated with keys they are thorught to hold
+- when user wants a file it starts request passed node to node where each node makes local decision of where to forward request depending on key requested
+- in order to keep requester and data ananonymous each node only knows immediate up and down stream neighbors in chain
+- each request has unique id for node to keep track of requests
+- node reject request with id it saw previously to prevent loops in network
+- depth counter incrememnted at each hop and used to set hops-to-live value when reply message is created so reply will reach original user
+- if downstream rejects request, sender chooses different node to forward to
+- chain continues until requested data is sent or hops-to-live value of request exceeded
+- upon request node seraches own files and returns data if found with note saying it was source of data
+- if node can't get request in own files looks up its routing table for key and forwards request ot node holds closest key
+- when running out of nodes to try, will send backtracking failure message to upstream reuqester which will then try second or whomever node; if all nodes tried user gets failure request
+- each node will cache file in its own database for future requests and create entry in routing table associating data source with requested key for future routing
+- to keep anonymouse data sources, any node can change reply message to claim it or any other node as data source and since data cached along way node will be able to serve future requests of same data
+- uses smallworld effect as search performance
+
+Gnutella:
+- node broadcasts to all neighbors when request file serach
+- 5 tyupes of messags: ping, pong, query, queryhit, push
+- each message has decriptor heading with id to identify message
+- TLL field in header specifies number of times message should be forwarded
+- hops field in header says how many times it was forwarded
+- when node joins network it sends a ping message to existing node it connects to; this node sends pong messagee to ping message sender with id 
+- pong node sends ping message to its neighbors except neighbor sending original ping message
+- nodes keep info about ping messages in their routing table
+- when getting pong messsage node looks up routing table to find connection that ping message came from and routes message backwards through same connection
+- pong message only sent along same path carried the incoming ping
+- if node receives pong with id=n but hsan't seen ping descriptor with same id it should remove pong from network 
+- TTL field of ping message makes sure the ping message isn't passed around forever
+- queries routed same as pings so node posts query to neighbors and new node passes around query and searches own files and sends back queryhit message to node that originates query if match found
+- queryhitmessage takes query's route backwards
+- if node receives same type of messgae with id it saw alredy doesn't forward message to any of neighbors to avoid loops
+- quiery hit message has number of hits, port, ip address, speed result set, servent id
+- queryhit message doesn't have actual file
+- after getting queryhit message node could downloaded selected files from nodes that proves files direcly using HTTP protocol so files aren't transferred off gnutella
+- allows node behind firewall to share files using push requests when direct connected can't be established
+- push request has servant id, file index, ip addrewss, port
+- after getting push request node that shares file identified by servant id attempts to establish tcp/ip connection to node id'd by ip address and port fields
+- if direct connection can't be made, requesting node probably behind firewall
+- if direct connection is made source node behind firewall sends GIV request to requesting node:
+GIV <file index>: <servant id>/<file name> \n\n
+- after getting GIV request header, requesting node constructs HTTP GET request with <file index> and <file name> extracted from header and sends it to source node behind firewall
+- finds optimal path length but large amount of query traffic over network is neede
+
+Problems with p2p:
+- many users don't share any files and 73% or less only share >= 10 files
+- decentralized p2p system noone to sue
+

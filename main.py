@@ -3,6 +3,7 @@ import thread
 import outgoing 
 import incoming 
 import ramp_db
+from cache import *
 
 connections = dict()
 
@@ -16,6 +17,8 @@ class app(Frame):
 
   def __init__(self, master=None):
     Frame.__init__(self, master)
+    self.search = ""
+    self.fType = None
     self.createScreen()
     self.pack()
     server = None
@@ -25,7 +28,21 @@ class app(Frame):
 
   def fillerFunction(self):
     return
+  
+  def select(self, v):
+    self.fType = str(v)
+    print(self.fType)
 
+  def searchPrivateFiles(self):
+    #will make connections and search files of peer
+    q = None
+    if (self.fType == "General Search"):
+      q = query(123, self.fileSearch.get(), "Private")
+      print(q, q.findLocal)
+    elif (self.fType == "Specific File"):
+      q = fileQuery(123, self.fileSearch.get(), "Private")
+      print(q, q.findLocal())
+  
   def createScreen(self):
     menubar = Menu(self)
     fileShareMenu = Menu(menubar, tearoff=0)
@@ -38,22 +55,35 @@ class app(Frame):
 #   self.a.pack()
     self.chatBox = Listbox(root)
     self.chatBox.pack()
-    self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230", relief=RAISED)
+    self.myname = Label(self,text="S:128.237.139.33\nJ:128.237.92.230")
     self.myname.pack()
-    self.cName = Entry(self)
+    self.cName = Entry(self, exportselection=True)
     self.cName.pack()
     #self.m = (self,orient=HORIZONTAL).grid(row=20, columnspan=10)
       #self.m.pack(fill=BOTH, expand=1)
-    self.myPort = Label(self,text="Connecting port",relief=RAISED)
+    self.myPort = Label(self,text="Connecting port")
     self.myPort.pack()
-    self.cPort = Entry(self)
+    self.cPort = Entry(self, exportselection=True)
     self.cPort.pack()
 
-    self.message = Entry(self)
+    self.message = Entry(self,exportselection=True)
     self.message.pack()
     self.Send = Button(self, text="Send Message",command= lambda: connect(self.message.get()))
     self.Send.pack()
     
+    self.var = StringVar()
+    self.var.set("File or Search:")
+    self.fileSearch = Entry(self, textvariable=self.var, exportselection=True)
+    self.fileSearch.pack()
+    self.type = ["Specific File","General Search"]
+    v = StringVar() 
+    x=Radiobutton(self, text=self.type[0],variable=v,value=self.type[0],command=lambda: self.select(self.type[0]))
+    x.pack()
+    y=Radiobutton(self, text=self.type[1],variable=v,value=self.type[1],command=lambda: self.select(self.type[1]))
+    y.pack()
+    searchTitle = Button(self, text="Search",command=self.searchPrivateFiles)
+    searchTitle.pack()
+
     for a in users:
       self.b=Radiobutton(self, text=a,variable=activeUser,value=a)
       self.b.pack()

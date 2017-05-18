@@ -16,8 +16,7 @@ class query:
         self.privPub = privPub
 
     def __repr__(self):
-        return ("query{message: "+str(self.messageID)+", message:"
-                +self.message+", privPub: "+self.privPub+"}")
+        return ("query{message: "+str(self.messageID)+", message:"+str(self.message)+", privPub: "+str(self.privPub)+"}")
     
     def alreadySeen(self):
         #returns -1 if not seen, 0 if seen 
@@ -76,7 +75,12 @@ class query:
 class fileQuery(query):
 
     def __init__(self, messageID, message, privPub):
-        super().__init__(messageID, message)
+        self.messageID = messageID
+        self.message = message
+        self.privPub = privPub
+
+    def __repr__(self):
+        return ("file query{message: "+str(self.messageID)+", message:"+str(self.message)+", privPub: "+str(self.privPub)+"}")
 
     def findLocal(self):
         seen = self.alreadySeen()
