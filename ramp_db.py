@@ -21,17 +21,14 @@ class chatMessage:
         return
 
 
-    def getChats(self, user)
-        sqlite_file = "Ramp.sqlite"
-        db = sqlite3.connect(sqlite_file,detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
-        cursor = db.cursor() 
-        cursor.execute(
-            '''SELECT * FROM messages where sender=?''', (user,))
-        cursor.execute(
-            '''SELECT * FROM messages where receiver?''', (user,))
-
-        log = cursor.fetchall()
-        db.commit()
-        db.close()
-        print(log)
-        return log
+def getChats(sender, receiver):
+    sqlite_file = "Ramp.sqlite"
+    db = sqlite3.connect(sqlite_file,detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
+    cursor = db.cursor() 
+    cursor.execute(
+        '''SELECT * FROM messages WHERE sender=? OR receiver=?''', (sender,receiver))
+    log = cursor.fetchall()
+    db.commit()
+    db.close()
+    print(log)
+    return log

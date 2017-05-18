@@ -36,24 +36,36 @@ def recClient(name, address):
         break
       print message
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
+      print(ramp_db.getChats(address[0], "127.0.0.1"))
       m.add_db()
     except Exception, e:
       print(e)
       break
   name.close()
 
+def fileReceive(connect, address, fileStr):
+  buffer = 1024
+  newFile = open(fileStr, 'w')
+  while 1:
+    data = connect.recv(buffer)
+    if not data:
+      break
+    print(data)
+    newFile.write(data)
+  newFile.close()
+  connect.close()
 
 def get_address(): #this function was taken from user wmcbrine on
 #ubuntuforums.org as a fix for gethostbyname issues on linux machines
-    try:
-        address = socket.gethostbyname(socket.gethostname())
-        # On my system, this always gives me 127.0.0.1. Hence...
-    except:
-        address = ''
-    if not address or address.startswith('127.'):
-        # ...the hard way.
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('4.2.2.1', 0))
-        address = s.getsockname()[0]
-        s.close()
-    return address
+  try:
+    address = socket.gethostbyname(socket.gethostname())
+    # On my system, this always gives me 127.0.0.1. Hence...
+  except:
+    address = ''
+  if not address or address.startswith('127.'):
+    # ...the hard way.
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(('4.2.2.1', 0))
+    address = s.getsockname()[0]
+    s.close()
+  return address
