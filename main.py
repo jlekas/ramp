@@ -7,24 +7,22 @@ from cache import *
 
 connections = dict()
 
-myName = ""
-myPort = ""
 
 messages = ["o", "s!", "my", "lmepo oit!", "bgpuse", "op"]
 users  = []
-activeUser = None
-
+# activeUser;
 
 class app(Frame):
 
   def __init__(self, master=None):
     Frame.__init__(self, master)
+    self.activeUser = None
     self.search = ""
     self.fType = None
     self.createScreen()
     self.pack()
     server = None
-    incoming.init(server)
+    incoming.init(server, self)
     myName = incoming.myName()
     myPort = incoming.myPort()
 
@@ -51,7 +49,7 @@ class app(Frame):
 
     self.message = Label(self, text= "Connect to IP:").grid(row=0, column=1)
     self.serverIP = Entry(self, text="IP Address:", exportselection=True)
-    self.connectButton = Button(self, text="connect", command= lambda: connect(self.serverIP.get())).grid(row=0, column=3)
+    self.connectButton = Button(self, text="connect", command= lambda: connect(self.serverIP.get())).grid(row=1, column=3)
  
 
     self.centerFrame = Frame(self)
@@ -64,6 +62,7 @@ class app(Frame):
     
 
     self.friendsList = Listbox(self)
+    self.friendsList.bind('<<ListboxSelect>>', clearConnectEntry)
     self.friendsList.grid(row=1, column=2)
 
     for u in users:
@@ -71,11 +70,12 @@ class app(Frame):
 
     self.serverIP.grid(row=0, column=2)
     self.myInfo = Label(self, text = "MyIP: %s" % (incoming.myName())).grid(row=0, column=0)
-    self.chatbox = Listbox(self)
+    self.chatbox = Listbox(self, selectmode=SINGLE)
     self.chatbox.grid(row=1, column=0)
-    self.chatentry = Entry(self, exportselection=True).grid(row=2, column=0)
+    self.chatentry = Entry(self, exportselection=True)
+    self.chatentry.grid(row=2, column=0)
 
-    self.sendFilebutton = Button(self, text="Send Message", command=callback).grid(row=2, column=1)
+    self.sendFilebutton = Button(self, text="Send Chat", command=chatOut).grid(row=2, column=1)
     # self.b = Button(self, text="b").grid(row=0, column=1)
     # self.c = Button(self, text="c").grid(row=1, column=0)
     # self.d = Button(self, text="d").grid(row=1, column=1)
@@ -146,12 +146,20 @@ def callback():
     print name
 
 def connect(message):
-  if a.serverIP.get() not in users:
+  if a.serverIP.get() == "":
+    print 'emyyy'
+    newPeer(users[a.friendsList.curselection()[0]])
+  elif a.serverIP.get() not in users:
     users.append(a.serverIP.get())
     a.friendsList.insert(END, a.serverIP.get())
-    newPeer()
-  elif a.serverIP.get() != activeUser:
-    newPeer()
+    newPeer(a.serverIP.get())
+  elif a.serverIP.get() != a.activeUser:
+    newPeer(a.serverIP.get())
+
+
+def clearConnectEntry(abc):
+    a.serverIP.delete(0,'end')
+
     
 
 
@@ -161,12 +169,25 @@ def connect(message):
   #print 'Name: %s' % (a.cName.get())
   #print 'Port %s' % (a.cPort.get())
 
-def newPeer():
+def newPeer(string):
     try: a.peerlabel.destroy()
     except: pass
-    activeUser = a.serverIP.get()
-    a.peerlabel = Label(a.centerFrame, text="%s" % activeUser)
+    a.activeUser = string
+    a.peerlabel = Label(a.centerFrame, text="%s" % a.activeUser)
     a.peerlabel.pack(side="bottom")
+
+
+def chatOut():
+    if a.chatentry.get() != "":
+        a.chatbox.insert(END, "Me: %s" % a.chatentry.get())
+        port = 1085
+        print '%s %s' % (a.activeUser, port)
+        thread.start_new_thread(outgoing.sendMessage,(a.activeUser,port,a.chatentry.get()))
+        a.chatentry.delete(0,'end')
+
+def chatIn(message):
+    a.chatbox.insert(END, "Peer: %s" % message)
+
 
 
 root = Tk()

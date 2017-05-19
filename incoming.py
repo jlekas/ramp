@@ -1,9 +1,11 @@
 #!/usr/bin/python
+from Tkinter import *
 import socket
 import thread
 import ramp_db
 
-def init(server):
+
+def init(server, frame):
   if server != None:
     server.close()
     server = None
@@ -13,23 +15,25 @@ def init(server):
   port = 1085
   server.bind((myIP,port))
   server.listen(5)
-  thread.start_new_thread(findClients,(1,server))
+  thread.start_new_thread(findClients,(1,server, frame))
 
 def myName():
   print get_address()
   return get_address() 
 
+
+
 def myPort():
   return "1085"
 
-def findClients(a, server):
+def findClients(a, server, frame):
   while a:
     user, address = server.accept()
     #print "Connection from %s %s" % (user, address)
-    thread.start_new_thread(recClient, (user, address))
+    thread.start_new_thread(recClient, (user, address, frame))
   server.close()
 
-def recClient(name, address):
+def recClient(name, address, frame):
   try: 
     tag = name.recv(1)
     if(tag == "/"):
@@ -40,10 +44,11 @@ def recClient(name, address):
     print "couldnt receive first bit"
   while 1:
     try:
-      message = name.recv(1) #magic number size of rec message
+      message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      print "MESSAGE :  %s" % message 
+      print "MESSAGE :  %s" % message
+      frame.chatbox.insert(END, "Peer: %s" % message)
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
       #print(ramp_db.getChats(address[0], "127.0.0.1"))
       m.add_db()
