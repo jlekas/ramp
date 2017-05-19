@@ -62,12 +62,32 @@ def recClient(name, address, frame,messages):
       message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      print "MESSAGE :  %s" % message
+      # print "MESSAGE :  %s" % message
+      # print 'name = %s active user = %s' % (address[0], frame.activeUser)
+
+
+      if address[0] not in messages:
+        print 'new messages from: %s' % address[0]
+        messages[address[0]] = []
+
+      messages[address[0]].append("Peer: %s\n" % message)
 
       frame.chatBox.config(state=NORMAL)
-      frame.chatBox.insert(END, "Peer: %s\n" % message)
+
+
+      print messages
+
+
+
+
+
+      frame.chatBox.delete(1.0, END)
+
+      for m in messages[frame.activeUser]:
+        frame.chatBox.insert(END, m)
+
+      # frame.chatBox.insert(END, "Peer: %s\n" % message)
       frame.chatBox.config(state=DISABLED)
-      messages[frame.activeUser].append("Peer: %s\n" % message)
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
       #print(ramp_db.getChats(address[0], "127.0.0.1"))
       m.add_db()

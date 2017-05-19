@@ -192,8 +192,10 @@ def connect(message):
     users.append(a.serverIP.get())
     a.friendsList.insert(END, a.serverIP.get())
 
-    messages[a.serverIP.get()] = [] #ADDED 
-    print messages  
+    if a.serverIP.get() not in messages:
+        messages[a.serverIP.get()] = [] #ADDED 
+    
+    # print messages  
     newPeer(a.serverIP.get())
   elif a.serverIP.get() != a.activeUser:
     newPeer(a.serverIP.get())
