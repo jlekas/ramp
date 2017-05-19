@@ -52,7 +52,7 @@ def sendVideo(name,port):
   
   pygame.init()
   pygame.camera.init()
-  size = (320, 240)
+  size = (640, 480)
   camList = pygame.camera.list_cameras()
   screen = pygame.display.set_mode(size)
   if (not camList):

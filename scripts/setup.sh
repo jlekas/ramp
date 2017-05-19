@@ -10,8 +10,9 @@ if [ "$(uname)" == "Linux" ]; then
   wget https://www.python.org/ftp/python/$version/Python-$version.tgz
   tar -xvf Python-$version.tgz
   cd Python-$version
-  sudo ./configure
-  sudo make altinstall
+  sudo ./configure --enable-unicode=ucs4
+  sudo make install
+  sudo apt-get install python-pip
   # at this point python 2.7.13 is installed and can be used
   sudo apt-get install python-tk
   #install or make sure sqlite3 is installed
@@ -21,3 +22,4 @@ elif [ "$(uname)" == "Darwin" ]; then
   #if the computer is a mac check that python 2.7.13 and various
   #packages are installed in order to run application
   echo "hello"
+fi

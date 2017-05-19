@@ -102,7 +102,7 @@ def fileRequest(connect, address, fileStr):
 
 def videoReceive(connect, address):
   print("start of videoReceive")
-  size = (320, 240)
+  size = (640, 480)
   screen = pygame.display.set_mode(size)
   pygame.display.set_caption("p2p video chat")
   buffer = 2048
