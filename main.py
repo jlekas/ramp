@@ -13,6 +13,8 @@ myPort = ""
 messages = ["o", "s!", "my", "lmepo oit!", "bgpuse", "op"]
 users  = []
 activeUser = None
+
+
 class app(Frame):
 
   def __init__(self, master=None):
@@ -48,14 +50,32 @@ class app(Frame):
 
 
     self.message = Label(self, text= "Connect to IP:").grid(row=0, column=1)
-    self.serverIP = Entry(self, text="IP Address:").grid(row=0, column =2)
+    self.serverIP = Entry(self, text="IP Address:", exportselection=True)
     self.connectButton = Button(self, text="connect", command= lambda: connect(self.serverIP.get())).grid(row=0, column=3)
+ 
 
+    self.centerFrame = Frame(self)
+    self.centerFrame.grid(row=1, column=1)
+
+    self.activeUserlabel = Label(self.centerFrame, text="Peer:")
+    self.activeUserlabel.pack(side="top")
+    # self.peerlabel = Label(self.centerFrame)
+    # self.peerlabel.pack(side="top")
+    
+
+    self.friendsList = Listbox(self)
+    self.friendsList.grid(row=1, column=2)
+
+    for u in users:
+        self.friendsList.insert(END, u)
+
+    self.serverIP.grid(row=0, column=2)
     self.myInfo = Label(self, text = "MyIP: %s" % (incoming.myName())).grid(row=0, column=0)
-    self.chatbox = Listbox(self).grid(row=1, column=0)
+    self.chatbox = Listbox(self)
+    self.chatbox.grid(row=1, column=0)
     self.chatentry = Entry(self, exportselection=True).grid(row=2, column=0)
 
-    self.sendFilebutton = Button(self, text="Send File", command=callback).grid(row=2, column=1)
+    self.sendFilebutton = Button(self, text="Send Message", command=callback).grid(row=2, column=1)
     # self.b = Button(self, text="b").grid(row=0, column=1)
     # self.c = Button(self, text="c").grid(row=1, column=0)
     # self.d = Button(self, text="d").grid(row=1, column=1)
@@ -118,27 +138,35 @@ class app(Frame):
 #       self.b.pack()
 #       print "a user button exists"
 
+
+
+
 def callback():
     name= askopenfilename() 
     print name
 
 def connect(message):
-  if a.cName.get not in users:
-    users.append(a.cName.get())
-    activeUser = a.cName.get()
-    for widget in a.winfo_children():
-      widget.destroy()
-    a.createScreen()
-    a.chatBox.destroy()
+  if a.serverIP.get() not in users:
+    users.append(a.serverIP.get())
+    a.friendsList.insert(END, a.serverIP.get())
+    newPeer()
+  elif a.serverIP.get() != activeUser:
+    newPeer()
     
-  print users
- # a.grid_forget()
- # a.createScreen()
-  thread.start_new_thread(outgoing.sendMessage,(a.cName.get(),a.cPort.get(),message))
+
+
+    # $$$$$ fn for send $$$$$$$$$ 
+  #thread.start_new_thread(outgoing.sendMessage,(activeUser,1085,message))
   
   #print 'Name: %s' % (a.cName.get())
   #print 'Port %s' % (a.cPort.get())
 
+def newPeer():
+    try: a.peerlabel.destroy()
+    except: pass
+    activeUser = a.serverIP.get()
+    a.peerlabel = Label(a.centerFrame, text="%s" % activeUser)
+    a.peerlabel.pack(side="bottom")
 
 
 root = Tk()
