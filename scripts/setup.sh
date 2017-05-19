@@ -16,6 +16,7 @@ if [ "$(uname)" == "Linux" ]; then
   sudo apt-get install python-tk
   #install or make sure sqlite3 is installed
   sudo apt-get install sqlite3
+  sudo pip install pygame
 elif [ "$(uname)" == "Darwin" ]; then
   #if the computer is a mac check that python 2.7.13 and various
   #packages are installed in order to run application

@@ -14,6 +14,7 @@ class query:
         self.messageID = messageID
         self.message = message
         self.privPub = privPub
+        self.searchType = "general"
 
     def __repr__(self):
         return ("query{message: "+str(self.messageID)+", message:"+str(self.message)+", privPub: "+str(self.privPub)+"}")
@@ -78,6 +79,7 @@ class fileQuery(query):
         self.messageID = messageID
         self.message = message
         self.privPub = privPub
+        self.searchType = "specific"
 
     def __repr__(self):
         return ("file query{message: "+str(self.messageID)+", message:"+str(self.message)+", privPub: "+str(self.privPub)+"}")
