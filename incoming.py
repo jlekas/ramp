@@ -63,13 +63,6 @@ def recClient(name, address, frame,messages):
       if not message:
         break
       print "MESSAGE :  %s" % message
-<<<<<<< HEAD
-      frame.chatBox.config(state=NORMAL)
-      frame.chatBox.insert(END, "Peer: %s\n" % message)
-      frame.chatBox.config(state = DISABLED)
-      messages[frame.activeUser].append("Peer: %s\n" % message)
-=======
->>>>>>> ffc3a92ea9ed8c9f3ec028a69ba41c3a2c8823d0
 
       frame.chatBox.config(state=NORMAL)
       frame.chatBox.insert(END, "Peer: %s\n" % message)
@@ -126,15 +119,6 @@ def videoReceive(connect, address):
     img = pygame.image.fromstring(d, size, "RGB")
     screen.blit(img, (0,0))
     pygame.display.update()
-<<<<<<< HEAD
-    for e in pygame.event.get():
-      if event.type == pygame.QUIT:
-        pygame.quit()
-=======
-    pygame.display.flip()
-
-
->>>>>>> ffc3a92ea9ed8c9f3ec028a69ba41c3a2c8823d0
 
 def fileReceive(connect, address, fileStr):
   buffer = 1024
