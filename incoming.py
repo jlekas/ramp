@@ -16,6 +16,7 @@ def init(server):
   thread.start_new_thread(findClients,(1,server))
 
 def myName():
+  print get_address()
   return get_address() 
 
 def myPort():
