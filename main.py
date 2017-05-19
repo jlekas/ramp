@@ -212,7 +212,7 @@ def chatIn(message):
 def vidOut():
   port = 1085
   print(a.activeUser)
-  thread.start_new_thread(outgoing.sendVideo,(a.activeUser,port,""))
+  thread.start_new_thread(outgoing.sendVideo,(a.activeUser,port))
 
 root = Tk()
 a = app(master=root)

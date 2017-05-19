@@ -5,7 +5,6 @@ import thread
 import ramp_db
 
 import cache
-from PIL import Image
 import pygame
 import sys
 import pygame.camera
@@ -29,8 +28,6 @@ def init(server, frame, messages):
 def myName():
   print get_address()
   return get_address() 
-
-
 
 def myPort():
   return "1085"
@@ -66,9 +63,10 @@ def recClient(name, address, frame,messages):
       if not message:
         break
       print "MESSAGE :  %s" % message
-      frame.chatbox.insert(END, "Peer: %s" % message)
-
-      messages[frame.activeUser].append("Peer: %s" % message)
+      frame.chatBox.config(state=NORMAL)
+      frame.chatBox.insert(END, "Peer: %s\n" % message)
+      frame.chatBox.config(state = DISABLED)
+      messages[frame.activeUser].append("Peer: %s\n" % message)
 
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
       #print(ramp_db.getChats(address[0], "127.0.0.1"))
@@ -103,41 +101,27 @@ def fileRequest(connect, address, fileStr):
 
 
 def videoReceive(connect, address):
-  print("start of func")
-  size = (480, 320)
-  pygame.init()
-  pygame.camera.init()
-  print("stuff")
-  screen = pygame.display.set_mode(size, 0)
+  print("start of videoReceive")
+  size = (320, 240)
+  screen = pygame.display.set_mode(size)
   pygame.display.set_caption("p2p video chat")
-  buffer = 1024000
-  timer = 0
-  prevImg = ""
-  img = ""
+  buffer = 2048
   while 1:
-    print("to loop")
     #check if pygame stuff shows quit
-    for e in pygame.event.get():
-      if e.type == pygame.QUIT:
-        pygame.quit()
-    print("before receive")
-    data = connect.recv(buffer)
-    print("after data,"+data)
-    if not data:
-      break
-    try:
-      img = pygame.image.fromString(useData, size, "RGB")
-      prevImg = img
-      img = Image.fromString("RGB", size, data)
-      img = img.resize(size)
-      img = pygame.image.frombuffer(img.tostring(),size,"RGB")
-    except:
-      img = prevImg
+    vid = []
+    while 1:
+      data = connect.recv(buffer)
+      if not data:
+        break
+      else:
+        vid.append(data)
+    d = ''.join(vid)
+    img = pygame.image.fromstring(d, size, "RGB")
     screen.blit(img, (0,0))
     pygame.display.update()
-    pygame.display.flip()
-    
-
+    for e in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit()
 
 def fileReceive(connect, address, fileStr):
   buffer = 1024
