@@ -68,20 +68,38 @@ class app(Frame):
     for u in users:
         self.friendsList.insert(END, u)
 
+
+    self.chatBoxFrame = Frame(self)
+    self.chatBoxFrame.grid(row=1, column=0)
+
+    self.scroll = Scrollbar(self.chatBoxFrame)
+    self.chatBox = Text(self.chatBoxFrame, width=50, height=15, state=DISABLED)
+    self.scroll.pack(side=RIGHT, fill=Y)
+    self.chatBox.pack(side=LEFT)
+
     self.serverIP.grid(row=0, column=2)
     self.myInfo = Label(self, text = "MyIP: %s" % (incoming.myName())).grid(row=0, column=0)
-    self.chatbox = Listbox(self, selectmode=SINGLE)
-    self.chatbox.grid(row=1, column=0)
-    self.chatentry = Entry(self, exportselection=True)
-    self.chatentry.bind('<Return>', chatOut)
-    self.chatentry.grid(row=2, column=0)
+    # self.chatbox = Text(self, width=50)
+    # self.chatbox.grid(row=1, column=0)
+    # S = Scrollbar(root)
 
-    self.sendChatButton = Button(self, text="Send Chat", command=chatOut).grid(row=2, column=1)
+
+
+
+    self.chatFrame = Frame(self)
+    self.chatFrame.grid(row=2, column=0)
+    self.sendChatButton = Button(self.chatFrame, text="Send Chat", command= lambda: chatOut(1),width=8)
+    self.sendChatButton.pack(side=RIGHT)
+
+    self.chatentry = Entry(self.chatFrame, exportselection=True,width=37)
+    self.chatentry.bind('<Return>', chatOut)
+    self.chatentry.pack(side=LEFT)
+
     self.vidChatButton = Button(self, text="Start Video Chat", command=vidOut).grid(row=2, column=2)
     self.fileLabel = Label(self, text="Search for Friends' Files").grid(row=3, column=1)
     self.var = StringVar()
     self.var.set("File or Search:")
-    self.fileSearch = Entry(self, textvariable=self.var, exportselection=True).grid(row=4, column=1)
+    self.fileSearch = Entry(self, exportselection=True).grid(row=4, column=1)
     self.type = ["Specific File","General Search"]
     v = StringVar() 
     x=Radiobutton(self, text=self.type[0],variable=v,value=self.type[0],command=lambda: self.select(self.type[0])).grid(row=4, column=0)
@@ -160,6 +178,17 @@ def connect(message):
   if a.serverIP.get() == "":
     newPeer(users[a.friendsList.curselection()[0]])
   elif a.serverIP.get() not in users:
+    print'got ehre'
+    try: 
+        print'aaaa'
+        outgoing.sendPing(a.serverIP.get())
+    except:
+        a.chatBox.config(state=NORMAL)
+        a.chatBox.delete(1.0, END)
+        a.chatBox.insert(END, "Could not connect to: %s\n" % a.serverIP.get())
+        a.chatBox.config(state=DISABLED)
+        return
+
     users.append(a.serverIP.get())
     a.friendsList.insert(END, a.serverIP.get())
 
@@ -168,10 +197,17 @@ def connect(message):
     newPeer(a.serverIP.get())
   elif a.serverIP.get() != a.activeUser:
     newPeer(a.serverIP.get())
+  
 
-  a.chatbox.delete(0, END) #ADDED
+  a.chatBox.config(state=NORMAL)
+  a.chatBox.delete(1.0, END) #ADDED
+  a.chatBox.config(state=DISABLED)
+
   for m in  messages[a.activeUser]: #ADDED
-    a.chatbox.insert(END, m) #ADDED
+    a.chatBox.config(state=NORMAL)
+    a.chatBox.insert(END, m) #ADDED
+    a.chatBox.config(state=DISABLED)
+
 
 
 def clearConnectEntry(abc):
@@ -194,11 +230,19 @@ def newPeer(string):
     a.peerlabel.pack(side="bottom")
 
 
-def chatOut():
+def chatOut(event):
+    if a.activeUser == None:
+        a.chatBox.config(state=NORMAL)
+        a.chatBox.insert(END, "You are not connected to anyone\n Connect to someone first ----------------->\n")
+        a.chatBox.config(state=DISABLED)
+        a.chatentry.delete(0,'end')
+        return
     if a.chatentry.get() != "":
-        a.chatbox.insert(END, "Me: %s" % a.chatentry.get())
+        a.chatBox.config(state=NORMAL)
+        a.chatBox.insert(END, "Me: %s\n" % a.chatentry.get())
+        a.chatBox.config(state=DISABLED)
 
-        messages[a.activeUser].append("Me: %s" % a.chatentry.get()) #ADDED
+        messages[a.activeUser].append("Me: %s\n" % a.chatentry.get()) #ADDED
 
 
         port = 1085
@@ -206,13 +250,11 @@ def chatOut():
         thread.start_new_thread(outgoing.sendMessage,(a.activeUser,port,a.chatentry.get()))
         a.chatentry.delete(0,'end')
 
-def chatIn(message):
-    a.chatbox.insert(END, "Peer: %s" % message)
 
 def vidOut():
   port = 1085
   print(a.activeUser)
-  thread.start_new_thread(outgoing.sendVideo,(a.activeUser,port,""))
+  thread.start_new_thread(outgoing.sendVideo,(a.activeUser,port))
 
 root = Tk()
 a = app(master=root)

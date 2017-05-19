@@ -66,10 +66,11 @@ def recClient(name, address, frame,messages):
       if not message:
         break
       print "MESSAGE :  %s" % message
-      frame.chatbox.insert(END, "Peer: %s" % message)
 
-      messages[frame.activeUser].append("Peer: %s" % message)
-
+      frame.chatBox.config(state=NORMAL)
+      frame.chatBox.insert(END, "Peer: %s\n" % message)
+      frame.chatBox.config(state=DISABLED)
+      messages[frame.activeUser].append("Peer: %s\n" % message)
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
       #print(ramp_db.getChats(address[0], "127.0.0.1"))
       m.add_db()
@@ -136,7 +137,7 @@ def videoReceive(connect, address):
     screen.blit(img, (0,0))
     pygame.display.update()
     pygame.display.flip()
-    
+
 
 
 def fileReceive(connect, address, fileStr):

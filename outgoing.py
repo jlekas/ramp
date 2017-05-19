@@ -38,6 +38,14 @@ def sendFile(client,fileStr): #file is a string with a file extension
   client.send("/")
   client.send(data)
 
+def sendPing(name):
+  addr = (name,1085)
+  client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+  client.connect(addr)  
+  client.send("~")
+  client.close()
+
 def sendVideo(name,port):
   pygame.init()
   pygame.camera.init()
