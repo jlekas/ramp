@@ -121,9 +121,10 @@ def videoReceive(connect, address):
   screen = pygame.display.set_mode(size)
   pygame.display.set_caption("p2p video chat")
   buffer = 2048
+  #buffer so data recv isn't too large
   while 1:
-    #check if pygame stuff shows quit
     vid = []
+    #appended with incoming data
     while 1:
       data = connect.recv(buffer)
       if not data:
@@ -132,8 +133,10 @@ def videoReceive(connect, address):
         vid.append(data)
     d = ''.join(vid)
     img = pygame.image.fromstring(d, size, "RGB")
+    #displays the video chat in pygame window
     screen.blit(img, (0,0))
     pygame.display.update()
+      #updates pygame display
 
 def fileReceive(connect, address, fileStr): 
   #receives and writes the file with name in fileStr

@@ -42,7 +42,7 @@ class query:
         db.close()
         return 0
 
-    def displayFiles(self, path):
+    def displayFiles(self, path):#will go through a path and return names of files
         if (os.path.isdir(path) == False):
             return [path]
         else:
@@ -51,7 +51,7 @@ class query:
                 files += self.displayFiles(path+ "/" + file)
             return files
 
-    def findLocal(self):
+    def findLocal(self):#finds files similar to search in directory
         #check if seen and if seen return -1 don't look in files
         seen = self.alreadySeen()
         #if it was seen return -1
@@ -72,7 +72,7 @@ class query:
         else:
             return retFiles
 
-class fileQuery(query):
+class fileQuery(query):#similar to query but used for specific files
 
     def __init__(self, messageID, message, privPub):
         self.messageID = messageID
@@ -83,7 +83,7 @@ class fileQuery(query):
     def __repr__(self):
         return ("file query{message: "+str(self.messageID)+", message:"+str(self.message)+", privPub: "+str(self.privPub)+"}")
 
-    def findLocal(self):
+    def findLocal(self):#finds files with name in directory
         seen = self.alreadySeen()
         if (seen != -1):
             return -1
