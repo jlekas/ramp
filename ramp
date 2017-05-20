@@ -33,7 +33,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 .SH INSTALLATION
-Currently Ramp is only supported on Mac and Linux environments. Ramp requires that python2.7.13 be installed on the machine running and requires several other python modules to be installed on the computer. In the scipts folder, there is a file setup.sh that will install the necessary modules and versions so that Ramp will correctly operate. In order to run ramp, there is an executable, ramp.exe that will properly load the application. 
+Currently Ramp is only supported on Mac and Linux environments. Ramp requires that python2.7.13 be installed on the machine running and requires several other python modules to be installed on the computer. In the scipts folder, there is a file setup.sh that will install the necessary modules and versions so that Ramp will correctly operate. In order to run ramp, there is an executable, ramp.exe that will properly load the application. After running setup.sh in a terminal run 'python2.7 init_db.py' in order to configure the database that is used.
 .SH OPTIONS
 Ramp does not take any options
 .SH HOW TO USE

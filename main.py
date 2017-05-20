@@ -170,5 +170,6 @@ def vidOut():
 
 #tkinter startup
 root = Tk()
+root.title("Ramp")
 a = app(master=root)
 a.mainloop()
