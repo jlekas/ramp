@@ -1,6 +1,0 @@
-- send files between users directly connected
-- send images to ascii
-- chat between users
-- request friends of a friend
-- make public/private directory of files to share
-- 
