@@ -42,8 +42,15 @@ def sendFile(name,port,fileStr): #file is a string with a file extension
   client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   client.connect(addr)
+  if fileStr[-3:] == "jpg":
+      client.send("j")
+  if fileStr[-3:] == "mp4":
+      client.send("4")
+  if fileStr[-3:] == "mp3":
+    client.send("3")
+  if fileStr[-3:] == "pdf":
+    client.send("p")
   data = open(fileStr).read()
-  client.send("/")
   print client
   client.send(data)
 

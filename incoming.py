@@ -43,8 +43,17 @@ def findClients(server, frame,messages):
 
 def recClient(name, address, frame,messages):
   tag = name.recv(1) #we use the first char of the string as an identifier
-  if(tag == "/"): # / = file receive 
+  if(tag == "j"): # / = file receive 
     fileReceive(name, address, "Downloads/%s.jpg" % str(datetime.datetime.now()))
+    return
+  if(tag == "4"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.mp4" % str(datetime.datetime.now()))
+    return
+  if(tag == "3"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.mp3" % str(datetime.datetime.now()))
+    return
+  if(tag == "p"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.pdf" % str(datetime.datetime.now()))
     return
   if(tag=="v"): # v = video
     videoReceive(name, address)
