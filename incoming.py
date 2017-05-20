@@ -9,10 +9,10 @@ import sys
 import pygame.camera
 from pygame.locals import *
 import outgoing
+import datetime
 
 
-#added messages to functions
-def init(server, frame, messages):
+def init(server, frame, messages): #called once at start, always uses port 1085
   if server != None:
     server.close()
     server = None
@@ -21,8 +21,9 @@ def init(server, frame, messages):
   myIP = get_address()
   port = 1085
   server.bind((myIP,port))
-  server.listen(5)
-  thread.start_new_thread(findClients,(1,server, frame,messages))
+  server.listen(5) #listens for up to 5 incoming connections at once
+  thread.start_new_thread(findClients,(server, frame,messages)) 
+  #find clients runs in new thread so main thread finishes first init in main
 
 def myName():
   print get_address()
@@ -31,38 +32,42 @@ def myName():
 def myPort():
   return "1085"
 
-def findClients(a, server, frame,messages):
-  while a:
+def findClients(server, frame,messages):
+  while 1:
     user, address = server.accept()
     #print "Connection from %s %s" % (user, address)
     thread.start_new_thread(recClient, (user, address, frame,messages))
+    #if a connection is found, it will handle the receiving in a new thread
+    #to allow for more connections to be found in parallel 
   server.close()
 
 def recClient(name, address, frame,messages):
-  #try: 
-  tag = name.recv(1)
-  if(tag == "/"):
-    fileReceive(name, address, "pupper.jpg")
-    print "receiving FILE"
+  tag = name.recv(1) #we use the first char of the string as an identifier
+  if(tag == "j"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.jpg" % str(datetime.datetime.now()))
     return
-  if(tag=="v"):
-    print"getting video 1"
+  if(tag == "4"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.mp4" % str(datetime.datetime.now()))
+    return
+  if(tag == "3"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.mp3" % str(datetime.datetime.now()))
+    return
+  if(tag == "p"): # / = file receive 
+    fileReceive(name, address, "Downloads/%s.pdf" % str(datetime.datetime.now()))
+    return
+  if(tag=="v"): # v = video
     videoReceive(name, address)
-    print"getting video"
     return
-  if(tag=="f"):
-    print("looking for file")
+  if(tag=="f"): # f = file request
     fileRequest(name, address, frame)
-    print("file reuqst fuckj:w")
     return
-  #except:
-  #  print "couldnt receive first bit"
-  while 1:
+  while 1: 
     try:
       message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      if address[0] not in messages:
+      if address[0] not in messages: 
+        #case where someone you are not connected to is messaging you
         print 'new messages from: %s' % address[0]
         messages[address[0]] = []
       messages[address[0]].append("Peer: %s\n" % message)
@@ -71,17 +76,16 @@ def recClient(name, address, frame,messages):
       frame.chatBox.delete(1.0, END)
       for m in messages[frame.activeUser]:
         frame.chatBox.insert(END, m)
-      # frame.chatBox.insert(END, "Peer: %s\n" % message)
       frame.chatBox.config(state=DISABLED)
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
-      #print(ramp_db.getChats(address[0], "127.0.0.1"))
       m.add_db()
     except Exception, e:
       print(e)
       break
   name.close()
 
-def fileRequest(connect, address, frame):
+def fileRequest(connect, address, frame): 
+  #receives a lookup and sends back file to peer of result from query
   buffer = 1024
   port = 1085
   data = []
@@ -92,24 +96,28 @@ def fileRequest(connect, address, frame):
     else:
       data.append(x)
   d = ''.join(data)
-  d = d.split(":")
+  d = d.split(":") 
   if (d[3] == "general"):
     q = cache.query(d[0], d[1], d[2])
   elif (d[3] == "specific"):
-    q = cache.fileQuery(d[0], d[1], d[2])
+    q = cache.fileQuery(d[0], d[1], d[2]) #query database differently for g/s
   if (q.alreadySeen() == -1):
     send = q.findLocal()
     if (send == 0):
-      print("no files")
+      frame.chatBox.config(state=NORMAL)
+      frame.chatBox.insert(END,"Could not find File\n")
+      frame.chatBox.config(state=DISABLED) 
   for f in send:
+    #can send multiple files at once if multiple results
     thread.start_new_thread(outgoing.sendFile, (frame.activeUser, port, f))
-    print("there we go")
+    frame.chatBox.config(state=NORMAL)
+    frame.chatBox.insert(END,"File Sent\n")
+    frame.chatBox.config(state=DISABLED)  
   connect.close()
 
 
 def videoReceive(connect, address):
-  print("start of videoReceive")
-  size = (640, 480)
+  size = (640, 480) #default size
   screen = pygame.display.set_mode(size)
   pygame.display.set_caption("p2p video chat")
   buffer = 2048
@@ -127,8 +135,8 @@ def videoReceive(connect, address):
     screen.blit(img, (0,0))
     pygame.display.update()
 
-def fileReceive(connect, address, fileStr):
-  print("to here at least")
+def fileReceive(connect, address, fileStr): 
+  #receives and writes the file with name in fileStr
   buffer = 1024
   print fileStr
   newFile = open(fileStr, 'w')
@@ -136,7 +144,6 @@ def fileReceive(connect, address, fileStr):
     data = connect.recv(buffer)
     if not data:
       break
-    #print(data)
     newFile.write(data)
   newFile.close()
   connect.close()

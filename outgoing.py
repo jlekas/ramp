@@ -10,7 +10,8 @@ from pygame.locals import *
 import cache
 import time
 
-def sendMessage(name,port,message):
+def sendMessage(name,port,message): 
+    #makes socket, sends "X" (tag for message), then sends message and closes
     port = int(port)
     addr = (name,port)
     buffer = 1024
@@ -23,6 +24,7 @@ def sendMessage(name,port,message):
 
 
 def sendFileRequest(name,port,q): #file is a string with a file extension
+  #makes socket, sends "f" (tag for fRequest) then sends string to search and closes
   port = int(port)
   addr = (name,port)
   client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,20 +36,26 @@ def sendFileRequest(name,port,q): #file is a string with a file extension
   client.close()
 
 def sendFile(name,port,fileStr): #file is a string with a file extension
+  #makes socket, sends "/" (tag for sendfile) then sends file and closes
   port = int(port)
   addr = (name,port)
   client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   client.connect(addr)
+  if fileStr[-3:] == "jpg":
+      client.send("j")
+  if fileStr[-3:] == "mp4":
+      client.send("4")
+  if fileStr[-3:] == "mp3":
+    client.send("3")
+  if fileStr[-3:] == "pdf":
+    client.send("p")
   data = open(fileStr).read()
-  print "issue here?"
-  client.send("/")
-  print "sends /"
   print client
   client.send(data)
-  print "sends data"
 
 def sendPing(name):
+  #sends single char "~", acts as a ping to check if there is a connection
   addr = (name,1085)
   client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -56,9 +64,9 @@ def sendPing(name):
   client.close()
 
 def sendVideo(name,port):
+  #send "v" for video and then continues to stream webcam until stopped
   port = int(port)
   addr = (name, port)
-  
   pygame.init()
   pygame.camera.init()
   size = (640, 480)
