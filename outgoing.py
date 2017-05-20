@@ -51,7 +51,6 @@ def sendFile(name,port,fileStr): #file is a string with a file extension
   if fileStr[-3:] == "pdf":
     client.send("p")
   data = open(fileStr).read()
-  print client
   client.send(data)
 
 def sendPing(name):

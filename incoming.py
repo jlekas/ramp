@@ -56,7 +56,10 @@ def recClient(name, address, frame,messages):
     fileReceive(name, address, "Downloads/%s.pdf" % str(datetime.datetime.now()))
     return
   if(tag=="v"): # v = video
-    videoReceive(name, address)
+    try:
+      videoReceive(name, address)
+    except:
+      return
     return
   if(tag=="f"): # f = file request
     fileRequest(name, address, frame)
@@ -136,7 +139,6 @@ def videoReceive(connect, address):
     #displays the video chat in pygame window
     screen.blit(img, (0,0))
     pygame.display.update()
-      #updates pygame display
 
 def fileReceive(connect, address, fileStr): 
   #receives and writes the file with name in fileStr
