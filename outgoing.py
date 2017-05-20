@@ -75,7 +75,6 @@ def sendVideo(name,port):
     print("no cams")
   cam = pygame.camera.Camera(camList[0], size)
   cam.start()
-  
   while True:
     img = cam.get_image()
     data = pygame.image.tostring(img, "RGB")

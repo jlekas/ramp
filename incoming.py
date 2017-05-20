@@ -99,7 +99,8 @@ def fileRequest(connect, address, frame):
     else:
       data.append(x)
   d = ''.join(data)
-  d = d.split(":") 
+  d = d.split(":")
+  send = 1
   if (d[3] == "general"):
     q = cache.query(d[0], d[1], d[2])
   elif (d[3] == "specific"):
