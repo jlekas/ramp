@@ -7,6 +7,7 @@ from cache import *
 
 
 messages = dict() #stores keys of other users and a list of messages since start
+users  = []
 
 
 class app(Frame):
@@ -92,8 +93,8 @@ class app(Frame):
 def connect(message):
   #called whenever the connect button is clicked
   if a.serverIP.get() == "":
+    newPeer(users[a.friendsList.curselection()[0]])
     #case where user selects from friends list and clicks connect
-    newPeer(messages[a.friendsList.curselection()[0]])
   elif a.serverIP.get() not in messages:
     #case where connecting to a new ip
     try: 
@@ -105,6 +106,8 @@ def connect(message):
         a.chatBox.insert(END, "Could not connect to: %s\n" % a.serverIP.get())
         a.chatBox.config(state=DISABLED)
         return
+
+    users.append(a.serverIP.get())
     #add friend and retrieve messages if they exist
     a.friendsList.insert(END, a.serverIP.get())
     if a.serverIP.get() not in messages:
