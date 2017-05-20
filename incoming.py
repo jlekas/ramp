@@ -3,7 +3,6 @@ from Tkinter import *
 import socket
 import thread
 import ramp_db
-
 import cache
 import pygame
 import sys
@@ -40,52 +39,38 @@ def findClients(a, server, frame,messages):
   server.close()
 
 def recClient(name, address, frame,messages):
-  try: 
-    tag = name.recv(1)
-    if(tag == "/"):
-      fileReceive(name, address, "pupper.jpg")
-      print "receiving FILE"
-      return
-    if(tag=="v"):
-      print"getting video 1"
-      videoReceive(name, address)
-      print"getting video"
-      return
-    if(tag=="f"):
-      print("looking for file")
-      fileRequest(name, address)
-      return
-  except:
-    print "couldnt receive first bit"
+  #try: 
+  tag = name.recv(1)
+  if(tag == "/"):
+    fileReceive(name, address, "pupper.jpg")
+    print "receiving FILE"
+    return
+  if(tag=="v"):
+    print"getting video 1"
+    videoReceive(name, address)
+    print"getting video"
+    return
+  if(tag=="f"):
+    print("looking for file")
+    fileRequest(name, address, frame)
+    print("file reuqst fuckj:w")
+    return
+  #except:
+  #  print "couldnt receive first bit"
   while 1:
     try:
       message = name.recv(1024) #magic number size of rec message
       if not message:
         break
-      # print "MESSAGE :  %s" % message
-      # print 'name = %s active user = %s' % (address[0], frame.activeUser)
-
-
       if address[0] not in messages:
         print 'new messages from: %s' % address[0]
         messages[address[0]] = []
-
       messages[address[0]].append("Peer: %s\n" % message)
-
       frame.chatBox.config(state=NORMAL)
-
-
-      print messages
-
-
-
-
-
+      print "messages", messages
       frame.chatBox.delete(1.0, END)
-
       for m in messages[frame.activeUser]:
         frame.chatBox.insert(END, m)
-
       # frame.chatBox.insert(END, "Peer: %s\n" % message)
       frame.chatBox.config(state=DISABLED)
       m = ramp_db.chatMessage(address[0], "127.0.0.1", message)
@@ -96,27 +81,29 @@ def recClient(name, address, frame,messages):
       break
   name.close()
 
-
-def fileRequest(connect, address, fileStr):
+def fileRequest(connect, address, frame):
   buffer = 1024
+  port = 1085
+  data = []
   while 1:
-    data = connect.recv(buffer)
-    if not data:
+    x = connect.recv(buffer)
+    if not x:
       break
-  if ":" not in data:
-    connect.close()
-    print("sorry error in file request")
-  d = data.split(":")
+    else:
+      data.append(x)
+  d = ''.join(data)
+  d = d.split(":")
   if (d[3] == "general"):
     q = cache.query(d[0], d[1], d[2])
   elif (d[3] == "specific"):
     q = cache.fileQuery(d[0], d[1], d[2])
-  if (q.alreadySeen != -1):
-    send = q.findLocal
+  if (q.alreadySeen() == -1):
+    send = q.findLocal()
     if (send == 0):
       print("no files")
   for f in send:
-    outgoing.sendFile(connect, f)
+    thread.start_new_thread(outgoing.sendFile, (frame.activeUser, port, f))
+    print("there we go")
   connect.close()
 
 
@@ -141,7 +128,9 @@ def videoReceive(connect, address):
     pygame.display.update()
 
 def fileReceive(connect, address, fileStr):
+  print("to here at least")
   buffer = 1024
+  print fileStr
   newFile = open(fileStr, 'w')
   while 1:
     data = connect.recv(buffer)

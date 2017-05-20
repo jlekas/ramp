@@ -30,7 +30,6 @@ class query:
             '''SELECT * FROM queries where messageID=?''', (self.messageID, )
             )
         q = cursor.fetchone()
-        print(q)
         if (q != None):
             db.close()
             return -1
@@ -49,14 +48,14 @@ class query:
         else:
             files = []
             for file in os.listdir(path):
-                files += self.displayFiles(path+ os.pathsep + file)
+                files += self.displayFiles(path+ "/" + file)
             return files
 
     def findLocal(self):
         #check if seen and if seen return -1 don't look in files
         seen = self.alreadySeen()
         #if it was seen return -1
-        if (seen == -1):
+        if (seen != -1):
             return -1
         #query hasn't been seen so looks up query in public directory
         files = self.displayFiles("Public")
@@ -86,7 +85,7 @@ class fileQuery(query):
 
     def findLocal(self):
         seen = self.alreadySeen()
-        if (seen == -1):
+        if (seen != -1):
             return -1
         #query hasn't been seen so looks up query in public directory
         files = self.displayFiles("Public")

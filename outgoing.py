@@ -29,14 +29,23 @@ def sendFileRequest(name,port,q): #file is a string with a file extension
   client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   client.connect(addr)
   client.send("f")
-  data = q.messageID + ":" + q.message + ":" + q.privPub + ":" + q.searchType
+  data = str(q.messageID) + ":" + q.message + ":" + q.privPub + ":" + q.searchType
   client.send(data)
   client.close()
 
-def sendFile(client,fileStr): #file is a string with a file extension
+def sendFile(name,port,fileStr): #file is a string with a file extension
+  port = int(port)
+  addr = (name,port)
+  client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+  client.connect(addr)
   data = open(fileStr).read()
+  print "issue here?"
   client.send("/")
+  print "sends /"
+  print client
   client.send(data)
+  print "sends data"
 
 def sendPing(name):
   addr = (name,1085)
